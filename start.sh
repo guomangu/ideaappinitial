@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Arrêter le script en cas d'erreur
+set -e
+
+echo "🚀 Démarrage de la Stack AI-Driven..."
+
+# Vérifier la présence de podman-compose ou docker-compose
+COMPOSE_CMD=""
+if command -v podman-compose &> /dev/null; then
+    COMPOSE_CMD="podman-compose"
+elif command -v docker-compose &> /dev/null; then
+    COMPOSE_CMD="docker-compose"
+else
+    echo "❌ Erreur : podman-compose ou docker-compose introuvable."
+    exit 1
+fi
+
+echo "⚙️  Étape 1 : Démarrage du Backend (Hono API)"
+# Construit et démarre le conteneur en arrière-plan
+$COMPOSE_CMD up -d --build backend
+echo "✅ Backend démarré sur http://localhost:3000"
+
+echo "⚙️  Étape 2 : Vérification du Frontend (Expo)"
+cd frontend
+
+# Installation des dépendances si node_modules n'existe pas
+if [ ! -d "node_modules" ]; then
+    echo "⏳ Installation des dépendances Frontend..."
+    # On privilégie npm local s'il existe, sinon on passe par podman
+    if command -v npm &> /dev/null; then
+        npm install
+    else
+        echo "⚠️ npm local non trouvé. Utilisation de Podman pour l'installation..."
+        podman run --rm --userns=keep-id -v "$(pwd):/app:Z" -w /app docker.io/node:20 npm install
+    fi
+else
+    echo "✅ Dépendances Frontend déjà installées."
+fi
+
+cd ..
+
+echo ""
+echo "🎉 Tout est prêt !"
+echo "👉 Backend : Les logs sont consultables via '$COMPOSE_CMD logs -f backend'"
+echo "👉 Frontend : Pour démarrer le serveur de développement mobile (Expo), lancez :"
+echo "   cd frontend"
+if command -v npm &> /dev/null; then
+    echo "   npm start"
+else
+    echo "   podman run --rm -it --userns=keep-id -p 8081:8081 -v \"\$(pwd):/app:Z\" -w /app docker.io/node:20 npm start"
+fi

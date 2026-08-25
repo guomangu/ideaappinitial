@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app:z
+      - ./database:/app/database:z
+    environment:
+      - DATABASE_URL=file:/app/database/database.sqlite
+      - NODE_ENV=development
+    command: npm run dev
+    restart: unless-stopped

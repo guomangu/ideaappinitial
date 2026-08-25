@@ -12,8 +12,18 @@ if command -v podman-compose &> /dev/null; then
 elif command -v docker-compose &> /dev/null; then
     COMPOSE_CMD="docker-compose"
 else
-    echo "❌ Erreur : podman-compose ou docker-compose introuvable."
-    exit 1
+    echo "⚠️ podman-compose n'est pas installé. Tentative d'installation automatique..."
+    if command -v dnf &> /dev/null; then
+        sudo dnf install -y podman-compose
+    elif command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y podman-compose
+    elif command -v pacman &> /dev/null; then
+        sudo pacman -S --noconfirm podman-compose
+    else
+        echo "❌ Impossible d'installer podman-compose automatiquement sur ce système. Veuillez l'installer manuellement (ex: pip install podman-compose)."
+        exit 1
+    fi
+    COMPOSE_CMD="podman-compose"
 fi
 
 echo "⚙️  Étape 1 : Démarrage du Backend (Hono API)"

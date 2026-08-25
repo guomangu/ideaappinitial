@@ -5,6 +5,41 @@ set -e
 
 echo "🚀 Démarrage de la Stack AI-Driven..."
 
+# Fonction pour installer un paquet selon l'OS
+install_package() {
+    local pkg_name=$1
+    echo "⚠️ $pkg_name n'est pas installé. Tentative d'installation automatique..."
+    if command -v dnf &> /dev/null; then
+        sudo dnf install -y "$pkg_name"
+    elif command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y "$pkg_name"
+    elif command -v pacman &> /dev/null; then
+        sudo pacman -S --noconfirm "$pkg_name"
+    else
+        echo "❌ Impossible d'installer $pkg_name automatiquement. Veuillez l'installer manuellement."
+        exit 1
+    fi
+}
+
+# Vérification des dépendances système (podman, npm, npx)
+if ! command -v podman &> /dev/null; then
+    install_package podman
+fi
+
+if ! command -v npm &> /dev/null || ! command -v npx &> /dev/null; then
+    echo "⚠️ npm ou npx n'est pas installé."
+    if command -v dnf &> /dev/null; then
+        sudo dnf install -y nodejs npm
+    elif command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y nodejs npm
+    elif command -v pacman &> /dev/null; then
+        sudo pacman -S --noconfirm nodejs npm
+    else
+        echo "❌ Impossible d'installer nodejs et npm automatiquement."
+        exit 1
+    fi
+fi
+
 # Vérifier la présence de podman-compose ou docker-compose
 COMPOSE_CMD=""
 if command -v podman-compose &> /dev/null; then
@@ -12,17 +47,7 @@ if command -v podman-compose &> /dev/null; then
 elif command -v docker-compose &> /dev/null; then
     COMPOSE_CMD="docker-compose"
 else
-    echo "⚠️ podman-compose n'est pas installé. Tentative d'installation automatique..."
-    if command -v dnf &> /dev/null; then
-        sudo dnf install -y podman-compose
-    elif command -v apt-get &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y podman-compose
-    elif command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm podman-compose
-    else
-        echo "❌ Impossible d'installer podman-compose automatiquement sur ce système. Veuillez l'installer manuellement (ex: pip install podman-compose)."
-        exit 1
-    fi
+    install_package podman-compose
     COMPOSE_CMD="podman-compose"
 fi
 
@@ -36,14 +61,8 @@ cd frontend
 
 # Installation des dépendances si node_modules n'existe pas
 if [ ! -d "node_modules" ]; then
-    echo "⏳ Installation des dépendances Frontend..."
-    # On privilégie npm local s'il existe, sinon on passe par podman
-    if command -v npm &> /dev/null; then
-        npm install
-    else
-        echo "⚠️ npm local non trouvé. Utilisation de Podman pour l'installation..."
-        podman run --rm --userns=keep-id -v "$(pwd):/app:Z" -w /app docker.io/node:20 npm install
-    fi
+    echo "⏳ Installation des dépendances Frontend avec npm..."
+    npm install
 else
     echo "✅ Dépendances Frontend déjà installées."
 fi
@@ -55,8 +74,4 @@ echo "🎉 Tout est prêt !"
 echo "👉 Backend : Les logs sont consultables via '$COMPOSE_CMD logs -f backend'"
 echo "👉 Frontend : Pour démarrer le serveur de développement mobile (Expo), lancez :"
 echo "   cd frontend"
-if command -v npm &> /dev/null; then
-    echo "   npm start"
-else
-    echo "   podman run --rm -it --userns=keep-id -p 8081:8081 -v \"\$(pwd):/app:Z\" -w /app docker.io/node:20 npm start"
-fi
+echo "   npm start"

@@ -26,6 +26,44 @@ La boucle d'exécution (Agent Loop) est le cœur de l'agent. Sans garde-fous, un
 ## 4. Portabilité et Conteneurisation (Dossier Autonome)
 L'environnement de travail doit être pensé comme un **dossier portable et complètement autonome**.
 
-*   **Tout-en-un à la racine :** Tout ce qui est nécessaire pour exécuter le projet (code source, scripts de démarrage comme `start.sh`, orchestration Docker/Podman, fichiers de base de données locale SQLite) doit se trouver dans ce dossier unique. Aucun composant système global complexe ne doit être requis en dehors des moteurs de conteneurs standards.
+*   **Tout-en-un à la racine :** Tout ce qui est nécessaire pour exécuter le projet (code source, scripts de démarrage comme `start.sh`, orchestration Docker/Podman, fichiers de base de données locale) doit se trouver dans ce dossier unique. Aucun composant système global complexe ne doit être requis en dehors des moteurs de conteneurs standards.
 *   **Dépendances embarquées :** Privilégier les installations locales de dépendances plutôt que globales, afin de s'assurer qu'un autre développeur (ou un agent IA) puisse cloner le dossier et lancer le projet instantanément sans conflit d'environnement.
 *   **Rangement par domaine :** Le dossier de travail doit être rigoureusement organisé (ex: `frontend/`, `backend/`, `database/`) pour qu'une IA ou un humain puisse naviguer et identifier immédiatement où se trouve chaque module du système.
+
+## 5. Synchronisation Documentaire & Suivi de Session
+À chaque session de développement, il est **obligatoire** de maintenir à jour les documents de référence :
+
+*   **Mise à jour de `sommaire_architecture.md` :** Doit impérativement être synchronisé avec l'arborescence réelle des fichiers, les nouveaux composants backend/frontend, les schémas Drizzle et les endpoints exposés.
+*   **Mise à jour de `avancement_projet.md` :** Doit lister précisément les étapes et sous-fonctionnalités déjà développées ainsi que les étapes restantes à réaliser selon la roadmap du Whitepaper.
+
+## 6. Capitalisation des Erreurs : Document `mauvaise_pratique.md`
+Tout développement d'envergure confronte les agents IA à des pièges récurrents (conflits de schémas, cascades destructives, appels API non mis en cache, erreurs silencieuses).
+
+*   **Tenue obligatoire du registre :** Le document [`mauvaise_pratique.md`](file:///home/gamo/Documents/iworker/mauvaise_pratique.md) à la racine recense chaque erreur majeure survenue, sa cause racine, l'anti-pattern à proscrire et la bonne pratique de remédiation adoptée.
+*   **Consultation préventive :** Tout agent IA intervenant sur le projet doit consulter ce registre avant d'entamer une refonte ou d'ajouter une brique sensible (authentification, transactions, appels externes, synchronisation hors-ligne).
+*   **Enrichissement systématique :** Dès qu'un bogue subtil, un goulet d'étranglement ou une régression est résolu, l'agent doit formaliser le cas dans `mauvaise_pratique.md` pour éviter sa réapparition par d'autres agents.
+
+## 7. Standards d'Excellence UX et UI ("Bon UX et UI")
+Tout composant ou interface conçu par un agent IA doit impérativement respecter la charte d'expérience utilisateur détaillée dans [`bon_ux_ui.md`](file:///home/gamo/Documents/iworker/bon_ux_ui.md) :
+
+*   **Priorités spatiales strictes :** Plus un élément est prioritaire pour l'utilisateur, plus il est placé haut, devant et mis en valeur visuellement. Sans même lire, l'utilisateur doit repérer la priorité immédiate et le bouton d'action clé.
+*   **Proximité des actions & Boutons "Tag" :**
+    *   Boutons d'ajout, modification ou suppression **collés à la valeur cible** (effet repère immédiat).
+    *   Format petit tag/pilule discret (`borderRadius: 14` à `20`), jamais d'icône orpheline ou de gros pavé perturbateur.
+    *   **Regroupement cohérent :** Actions de modification et de suppression réunies dans la même bulle contextuelle pour économiser l'attention (TDAH-friendly).
+*   **Glassmorphisme doux & contrastes nuancés :**
+    *   Fond glassmorphe translucide avec bordures subtiles.
+    *   Ni blanc pur aveuglant (`#ffffff`), ni noir complet agressif (`#000000`). Nuancer toujours les teintes vers un sombre adouci (ardoise bleutée) ou un clair feutré.
+*   **Interface respirante, groupée en Cards (TDAH-friendly) :**
+    *   Aérer généreusement avec du padding et des marges.
+    *   Grouper impérativement les informations associées dans des **cards visuelles** pour structurer l'espace et apaiser la charge cognitive.
+*   **Arrondis systématiques (Zéro angle aigu) :**
+    *   Bannir les coins droits qui créent une sensation inconsciente d'insécurité (`borderRadius` systématique de 12px à 24px pour inputs, boutons et cartes).
+*   **Formulaires progressifs par bulles contextuelles :**
+    *   Bannir les formulaires géants intimidants.
+    *   Procéder par itérations progressives : créer la donnée maîtresse en premier, puis enrichir.
+    *   Pas de formulaires pré-affichés encombrants : utiliser un bouton d'action placé près de la zone concernée qui ouvre une bulle/modale de complétion ciblée.
+    *   **Maximum 2 champs à la fois**, avec des placeholders évocateurs et des labels discrets ou contextuels.
+*   **Dissimulation des zones destructives ou marginales :**
+    *   Les blocs comme « Supprimer le compte » ne doivent jamais monopoliser l'attention.
+    *   Ils doivent être dissimulés par défaut sous un bouton sobre (accordéon contextuel qui s'ouvre sous le bouton).

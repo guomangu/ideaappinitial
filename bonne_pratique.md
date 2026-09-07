@@ -1,4 +1,4 @@
-# Bonnes Pratiques pour le Développement d'Agents IA Autonomes — Plateforme iWorker
+# Bonnes Pratiques pour le Développement d'Agents IA Autonomes — Plateforme Coolove
 
 Le développement d'agents IA autonomes nécessite une approche rigoureuse pour gérer le comportement non-déterministe des modèles de langage (LLM). Ce document constitue le **cœur central de référence** gouvernant l'architecture, la sécurité, l'observabilité, la résilience et les standards de conception du projet.
 
@@ -10,11 +10,11 @@ Le développement d'agents IA autonomes nécessite une approche rigoureuse pour 
 > **Règle d'or de démarrage pour tout agent IA :**
 > Avant d'écrire la moindre ligne de code, de concevoir une fonctionnalité ou d'exécuter un refactoring, **l'agent doit impérativement lire et intégrer les documents de référence situés à la racine du projet**. Citer `bonne_pratique.md` suffit à convoquer l'ensemble de cet écosystème documentaire obligatoire :
 >
-> 1. [**Whitepaper du Projet**](file:///home/gamo/Documents/iworker/Whitepaper%20du%20Projet%20_%20Plateforme%20Portfolio%20&%20Pani....md) : Thèse, modèle atomique, architecture AI-Native & roadmap fonctionnelle.
-> 2. [**Sommaire de l'Architecture**](file:///home/gamo/Documents/iworker/sommaire_architecture.md) : Cartographie exacte des modules backend/frontend, schémas de données et endpoints exposés.
-> 3. [**État d'Avancement du Projet**](file:///home/gamo/Documents/iworker/avancement_projet.md) : Suivi rigoureux des étapes achevées, des fonctionnalités déployées et des chantiers en cours.
-> 4. [**Registre des Mauvaises Pratiques**](file:///home/gamo/Documents/iworker/mauvaise_pratique.md) : Mémoire collective des erreurs passées, pièges récurrents et anti-patterns formellement proscrits.
-> 5. [**Charte d'Excellence Bon UX & UI**](file:///home/gamo/Documents/iworker/bon_ux_ui.md) : Règles strictes d'ergonomie, glassmorphisme doux, respiration TDAH-friendly, zéro angle aigu et formulaires progressifs.
+> 1. [**The Universal Stack (README)**](./README.md) : Thèse, modèle atomique, architecture AI-Native & roadmap fonctionnelle.
+> 2. [**Documentation de la Stack Technique**](./stack_universelle.md) : Cartographie exacte des modules backend/frontend, schémas de données et endpoints exposés.
+> 3. [**État d'Avancement du Projet**](./avancement_projet.md) : Suivi rigoureux des étapes achevées, des fonctionnalités déployées et des chantiers en cours.
+> 4. [**Registre des Mauvaises Pratiques**](./mauvaise_pratique.md) : Mémoire collective des erreurs passées, pièges récurrents et anti-patterns formellement proscrits.
+> 5. [**Charte d'Excellence Bon UX & UI**](./bon_ux_ui.md) : Règles strictes d'ergonomie, glassmorphisme doux, respiration TDAH-friendly, zéro angle aigu et formulaires progressifs.
 
 ---
 
@@ -92,7 +92,7 @@ L'environnement de travail doit être pensé comme un **dossier portable et comp
 ## 8. Synchronisation Documentaire & Suivi de Session
 À chaque session de développement, il est **obligatoire** de maintenir à jour les documents de référence :
 
-*   **Mise à jour de `sommaire_architecture.md` :** Doit impérativement être synchronisé avec l'arborescence réelle des fichiers, les nouveaux composants backend/frontend, les schémas Drizzle et les endpoints exposés.
+*   **Mise à jour de `stack_universelle.md` :** Doit impérativement être synchronisé avec l'arborescence réelle des fichiers, les nouveaux composants backend/frontend, les schémas Drizzle et les endpoints exposés.
 *   **Mise à jour de `avancement_projet.md` :** Doit lister précisément les étapes et sous-fonctionnalités déjà développées ainsi que les étapes restantes à réaliser selon la roadmap du Whitepaper.
 
 ---
@@ -100,14 +100,14 @@ L'environnement de travail doit être pensé comme un **dossier portable et comp
 ## 9. Capitalisation des Erreurs : Document `mauvaise_pratique.md`
 Tout développement d'envergure confronte les agents IA à des pièges récurrents (conflits de schémas, cascades destructives, appels API non mis en cache, erreurs silencieuses).
 
-*   **Tenue obligatoire du registre :** Le document [`mauvaise_pratique.md`](file:///home/gamo/Documents/iworker/mauvaise_pratique.md) à la racine recense chaque erreur majeure survenue, sa cause racine, l'anti-pattern à proscrire et la bonne pratique de remédiation adoptée.
+*   **Tenue obligatoire du registre :** Le document [`mauvaise_pratique.md`](./mauvaise_pratique.md) à la racine recense chaque erreur majeure survenue, sa cause racine, l'anti-pattern à proscrire et la bonne pratique de remédiation adoptée.
 *   **Consultation préventive :** Tout agent IA intervenant sur le projet doit consulter ce registre avant d'entamer une refonte ou d'ajouter une brique sensible (authentification, transactions, appels externes, synchronisation hors-ligne).
 *   **Enrichissement systématique :** Dès qu'un bogue subtil, un goulet d'étranglement ou une régression est résolu, l'agent doit formaliser le cas dans `mauvaise_pratique.md` pour éviter sa réapparition par d'autres agents.
 
 ---
 
 ## 10. Standards d'Excellence UX et UI ("Bon UX et UI")
-Tout composant ou interface conçu par un agent IA doit impérativement respecter la charte d'expérience utilisateur détaillée dans [`bon_ux_ui.md`](file:///home/gamo/Documents/iworker/bon_ux_ui.md) :
+Tout composant ou interface conçu par un agent IA doit impérativement respecter la charte d'expérience utilisateur détaillée dans [`bon_ux_ui.md`](./bon_ux_ui.md) :
 
 *   **Priorités spatiales strictes :** Plus un élément est prioritaire pour l'utilisateur, plus il est placé haut, devant et mis en valeur visuellement. Sans même lire, l'utilisateur doit repérer la priorité immédiate et le bouton d'action clé.
 *   **Proximité des actions & Boutons "Tag" :**
